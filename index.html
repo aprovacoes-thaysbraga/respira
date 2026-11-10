@@ -42,6 +42,15 @@ img{max-width:100%}
 .month{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0}
 .handle{font-size:12px;color:var(--muted);margin:2px 0 0}
 .list-title{margin:30px 0 10px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.temaGroup{margin:0}
+.temaGroup + .temaGroup{margin-top:4px}
+summary.list-title{cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;user-select:none}
+summary.list-title::-webkit-details-marker{display:none}
+summary.list-title::before{content:"▸";display:inline-block;font-size:9px;transition:transform .15s}
+.temaGroup[open] summary.list-title::before{transform:rotate(90deg)}
+summary.list-title .count{color:var(--muted);font-weight:400;letter-spacing:0;text-transform:none}
+.temaGroup > .list{display:none}
+.temaGroup[open] > .list{display:flex}
 .summary{margin:0 0 12px;font-size:12px;color:var(--muted)}
 .list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
 .item{width:100%;display:flex;align-items:center;gap:12px;padding:7px 8px;border-radius:12px;text-align:left;transition:background .15s}
@@ -331,7 +340,7 @@ function build(){
         <span class="tipo" title="${TIPO_LABEL[p.tipo]}">${ICON[p.tipo]}</span>
       </button></li>`;
     }).join("");
-    return `<p class="list-title">${esc(tema)}</p><ul class="list">${itens}</ul>`;
+    return `<details class="temaGroup"><summary class="list-title">${esc(tema)} <span class="count">${grupos[tema].length}</span></summary><ul class="list">${itens}</ul></details>`;
   }).join("");
 
   const ordemFeed = POSTS.map((_,i)=>i).sort((a,b)=>b-a);
