@@ -171,9 +171,15 @@ summary.list-title .count{color:var(--muted);font-weight:400;letter-spacing:0;te
 .side-arrow.left{left:max(16px,calc(50% - 290px))}
 .side-arrow.right{right:max(16px,calc(50% - 290px))}
 
+.sideToggle{display:none}
 @media (max-width:860px){
   .app{grid-template-columns:1fr}
   .side{position:static;height:auto;padding:18px 16px 10px;border-right:0;border-bottom:1px solid var(--line)}
+  .sideToggle{display:flex;width:100%;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;border-radius:12px;background:var(--card);border:1px solid var(--line);font:inherit;font-weight:600;font-size:13px;color:var(--ink);cursor:pointer}
+  .sideToggle svg{width:16px;height:16px;flex:none;transition:transform .15s}
+  .side.open .sideToggle svg{transform:rotate(180deg)}
+  .sideBody{display:none}
+  .side.open .sideBody{display:block;margin-top:14px}
   .client{margin:14px 0 2px;font-size:24px}
   .list-title{margin:16px 0 6px}
   .list{flex-direction:row;overflow-x:auto;gap:8px;padding-bottom:8px;scrollbar-width:none}
@@ -195,12 +201,18 @@ summary.list-title .count{color:var(--muted);font-weight:400;letter-spacing:0;te
 <body>
 
 <div class="app">
-  <aside class="side">
-    <div class="brand">Aprovação de posts<small>Prévia do Instagram</small></div>
-    <h2 class="client" id="clientName"></h2>
-    <p class="handle" id="clientHandle"></p>
-    <p class="summary" id="summary">Carregando…</p>
-    <div id="list"></div>
+  <aside class="side" id="side">
+    <button class="sideToggle" id="sideToggle" type="button" aria-expanded="false">
+      <span>Ver lista de posts</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="sideBody" id="sideBody">
+      <div class="brand">Aprovação de posts<small>Prévia do Instagram</small></div>
+      <h2 class="client" id="clientName"></h2>
+      <p class="handle" id="clientHandle"></p>
+      <p class="summary" id="summary">Carregando…</p>
+      <div id="list"></div>
+    </div>
   </aside>
 
   <main class="main">
@@ -641,6 +653,11 @@ document.addEventListener("keydown", e=>{
   const n = slides(POSTS[cur]).length;
   if(e.key==="ArrowRight"){ if(idx<n-1) go(1); else goPost(-1); }
   if(e.key==="ArrowLeft"){ if(idx>0) go(-1); else goPost(1); }
+});
+
+$("#sideToggle").addEventListener("click", ()=>{
+  const aberto = $("#side").classList.toggle("open");
+  $("#sideToggle").setAttribute("aria-expanded", String(aberto));
 });
 
 /* ---- inicialização ---- */
