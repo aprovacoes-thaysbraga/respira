@@ -405,8 +405,20 @@ async function salvarDecisao(i, status, nota){
     note("Resposta salva. Você pode mudar quando quiser.");
   }catch(e){ note("Não deu para salvar agora. Toque de novo para tentar.", true); }
 }
-$("#bOk").addEventListener("click", ()=>salvarDecisao(cur,"ok",""));
+async function limparDecisao(i){
+  delete ESTADO[i];
+  paintStatus(); showDec(i); note("Salvando...");
+  try{
+    await db.collection("posts").doc(String(i)).delete();
+    note("");
+  }catch(e){ note("Não deu para salvar agora. Toque de novo para tentar.", true); }
+}
+$("#bOk").addEventListener("click", ()=>{
+  if((ESTADO[cur]||{}).status==="ok") limparDecisao(cur);
+  else salvarDecisao(cur,"ok","");
+});
 $("#bNo").addEventListener("click", ()=>{
+  if((ESTADO[cur]||{}).status==="ajuste"){ limparDecisao(cur); $("#fix").hidden = true; return; }
   $("#bOk").setAttribute("aria-pressed","false");
   $("#bNo").setAttribute("aria-pressed","true");
   $("#fix").hidden = false;
@@ -480,6 +492,8 @@ function open(i, from){
 function close(){
   stopVideo();
   $("#modal").hidden = true;
+  $("#pPrevOut").hidden = true;
+  $("#pNextOut").hidden = true;
   document.body.style.overflow = "";
   document.querySelectorAll(".item").forEach(b=>b.setAttribute("aria-current","false"));
   if(opener) opener.focus({preventScroll:true});
