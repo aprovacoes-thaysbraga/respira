@@ -190,9 +190,8 @@ img{max-width:100%}
     <div class="brand">Aprovação de posts<small>Prévia do Instagram</small></div>
     <h2 class="client" id="clientName"></h2>
     <p class="handle" id="clientHandle"></p>
-    <p class="list-title">Os posts, em ordem de publicação</p>
     <p class="summary" id="summary">Carregando…</p>
-    <ul class="list" id="list"></ul>
+    <div id="list"></div>
   </aside>
 
   <main class="main">
@@ -210,15 +209,15 @@ img{max-width:100%}
   </main>
 </div>
 
-<button class="side-arrow left" id="pPrevOut" aria-label="Post anterior" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
-<button class="side-arrow right" id="pNextOut" aria-label="Próximo post" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+<button class="side-arrow left" id="pPrevOut" aria-label="Próximo post" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+<button class="side-arrow right" id="pNextOut" aria-label="Post anterior" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
 
 <div class="modal" id="modal" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mTitle">
     <div class="when">
-      <button class="pnav" id="pPrev" aria-label="Post anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="pnav" id="pPrev" aria-label="Próximo post"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
       <p class="d" id="mWhen"></p>
-      <button class="pnav" id="pNext" aria-label="Próximo post"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+      <button class="pnav" id="pNext" aria-label="Post anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
     </div>
     <div class="media">
       <div class="track" id="track"></div>
@@ -293,6 +292,15 @@ function art(s){
   return s.img ? `<img src="${esc(s.img)}" alt="" loading="lazy" draggable="false">` : "";
 }
 
+const PRIORIDADE_TEMAS = ["Tema da semana","Respiro","Identificação","Saúde emocional","Corte do episódio","Carrossel do episódio","Informação","Histórias reais","Relacionamentos","Humor"];
+function ordemTemas(lista){
+  const vistos = [];
+  lista.forEach(t=>{ if(!vistos.includes(t)) vistos.push(t); });
+  const emPrioridade = PRIORIDADE_TEMAS.filter(t=>vistos.includes(t));
+  const resto = vistos.filter(t=>!PRIORIDADE_TEMAS.includes(t));
+  return emPrioridade.concat(resto);
+}
+
 /* ---- barra lateral, perfil e grade ---- */
 function build(){
   $("#clientName").textContent = CLIENTE.nome;
@@ -303,20 +311,27 @@ function build(){
   $("#pBio").textContent = CLIENTE.bio;
   document.title = "Aprovação · "+CLIENTE.nome;
 
-  $("#list").innerHTML = POSTS.map((p,i)=>{
-    if(p.placeholder) return `
-    <li><div class="item placeholder">
-      <span class="num">${pad(i)}</span>
-      <span class="thumb"></span>
-      <span class="tema"><span>Aguardando episódio</span><small>${dataCurta(p)} · ${DIAS[dt(p).getDay()].slice(0,3)}</small></span>
-    </div></li>`;
-    return `
-    <li><button class="item" data-i="${i}">
-      <span class="num">${pad(i)}</span>
-      <span class="thumb">${art(slides(p)[0])}<i class="st" data-s=""></i></span>
-      <span class="tema"><span>${esc(p.tema)}</span><small>${dataCurta(p)} · ${DIAS[dt(p).getDay()].slice(0,3)}</small></span>
-      <span class="tipo" title="${TIPO_LABEL[p.tipo]}">${ICON[p.tipo]}</span>
-    </button></li>`;
+  const grupos = {};
+  POSTS.forEach((p,i)=>{ (grupos[p.tema] = grupos[p.tema]||[]).push(i); });
+  const temasOrdenados = ordemTemas(POSTS.map(p=>p.tema));
+  $("#list").innerHTML = temasOrdenados.map(tema=>{
+    const itens = grupos[tema].map(i=>{
+      const p = POSTS[i];
+      if(p.placeholder) return `
+      <li><div class="item placeholder">
+        <span class="num">${pad(i)}</span>
+        <span class="thumb"></span>
+        <span class="tema"><span>Aguardando episódio</span><small>${dataCurta(p)} · ${DIAS[dt(p).getDay()].slice(0,3)}</small></span>
+      </div></li>`;
+      return `
+      <li><button class="item" data-i="${i}">
+        <span class="num">${pad(i)}</span>
+        <span class="thumb">${art(slides(p)[0])}<i class="st" data-s=""></i></span>
+        <span class="tema"><span>${esc(p.tema)}</span><small>${dataCurta(p)} · ${DIAS[dt(p).getDay()].slice(0,3)}</small></span>
+        <span class="tipo" title="${TIPO_LABEL[p.tipo]}">${ICON[p.tipo]}</span>
+      </button></li>`;
+    }).join("");
+    return `<p class="list-title">${esc(tema)}</p><ul class="list">${itens}</ul>`;
   }).join("");
 
   const ordemFeed = POSTS.map((_,i)=>i).sort((a,b)=>b-a);
@@ -503,8 +518,8 @@ function open(i, from){
 
   $("#dots").innerHTML = sl.length>1 ? sl.map((_,k)=>`<span class="${k?"":"on"}"></span>`).join("") : "";
   $("#mWhen").innerHTML = `<span>Post ${pad(i)} de ${POSTS.length} · postar em</span><b>${esc(dataLonga(p))}</b>`;
-  $("#pPrev").disabled = i===0; $("#pNext").disabled = i===POSTS.length-1;
-  $("#pPrevOut").hidden = i===0; $("#pNextOut").hidden = i===POSTS.length-1;
+  $("#pPrev").disabled = i===POSTS.length-1; $("#pNext").disabled = i===0;
+  $("#pPrevOut").hidden = i===POSTS.length-1; $("#pNextOut").hidden = i===0;
   $("#mMeta").innerHTML = `Post ${pad(i)} &nbsp;·&nbsp; ${esc(dataCurta(p))} &nbsp;·&nbsp; <b>${TIPO_LABEL[p.tipo]}${p.tipo==="carrossel"?" · "+sl.length+" imagens":""}</b>`;
   $("#mTitle").textContent = p.titulo;
   $("#mCap").textContent = p.legenda;
@@ -606,17 +621,17 @@ document.addEventListener("click", e=>{
 $("#close").addEventListener("click", close);
 $("#prev").addEventListener("click", ()=>go(-1));
 $("#next").addEventListener("click", ()=>go(1));
-$("#pPrev").addEventListener("click", ()=>goPost(-1));
-$("#pNext").addEventListener("click", ()=>goPost(1));
-$("#pPrevOut").addEventListener("click", e=>{ e.stopPropagation(); goPost(-1); });
-$("#pNextOut").addEventListener("click", e=>{ e.stopPropagation(); goPost(1); });
+$("#pPrev").addEventListener("click", ()=>goPost(1));
+$("#pNext").addEventListener("click", ()=>goPost(-1));
+$("#pPrevOut").addEventListener("click", e=>{ e.stopPropagation(); goPost(1); });
+$("#pNextOut").addEventListener("click", e=>{ e.stopPropagation(); goPost(-1); });
 document.addEventListener("keydown", e=>{
   if($("#modal").hidden) return;
   if(e.target.tagName==="TEXTAREA") return;
   if(e.key==="Escape") close();
   const n = slides(POSTS[cur]).length;
-  if(e.key==="ArrowRight"){ if(idx<n-1) go(1); else goPost(1); }
-  if(e.key==="ArrowLeft"){ if(idx>0) go(-1); else goPost(-1); }
+  if(e.key==="ArrowRight"){ if(idx<n-1) go(1); else goPost(-1); }
+  if(e.key==="ArrowLeft"){ if(idx>0) go(-1); else goPost(1); }
 });
 
 /* ---- inicialização ---- */
