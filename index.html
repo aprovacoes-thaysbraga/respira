@@ -240,13 +240,15 @@ img{max-width:100%}
           <button class="btn no" id="bNo" aria-pressed="false">Pedir ajuste</button>
         </div>
         <div class="fix" id="fix" hidden>
-          <label class="label" for="fixText">O que precisa mudar?</label>
-          <textarea id="fixText" placeholder="Ex.: trocar a foto do slide 2, deixar a legenda mais curta..."></textarea>
-          <button class="send" id="bSend" disabled>Enviar ajuste</button>
-        </div>
-        <div class="sentAdjust" id="sentAdjust" hidden>
-          <p class="label">Ajuste enviado</p>
-          <p id="sentAdjustText"></p>
+          <div id="fixEdit">
+            <label class="label" for="fixText">O que precisa mudar?</label>
+            <textarea id="fixText" placeholder="Ex.: trocar a foto do slide 2, deixar a legenda mais curta..."></textarea>
+            <button class="send" id="bSend" disabled>Enviar ajuste</button>
+          </div>
+          <div class="sentAdjust" id="sentAdjust" hidden>
+            <p class="label">Ajuste enviado</p>
+            <p id="sentAdjustText"></p>
+          </div>
         </div>
         <p class="note" id="decNote" role="status"></p>
       </section>
@@ -385,15 +387,17 @@ function paintStatus(){
     : "Carregando…";
 }
 
+let editAjuste = false;
 function showDec(i){
   const e = ESTADO[i] || {};
   $("#bOk").setAttribute("aria-pressed", String(e.status==="ok"));
   $("#bNo").setAttribute("aria-pressed", String(e.status==="ajuste"));
   $("#fix").hidden = e.status!=="ajuste";
-  const jaEnviado = e.status==="ajuste" && e.nota;
+  const jaEnviado = e.status==="ajuste" && e.nota && !editAjuste;
+  $("#fixEdit").hidden = jaEnviado;
+  $("#sentAdjust").hidden = !jaEnviado;
   $("#fixText").value = jaEnviado ? "" : (e.nota || "");
   $("#bSend").disabled = !$("#fixText").value.trim();
-  $("#sentAdjust").hidden = !jaEnviado;
   $("#sentAdjustText").textContent = jaEnviado ? e.nota : "";
   note(e.status ? "Resposta salva. Você pode mudar quando quiser." : "");
 }
@@ -429,15 +433,28 @@ $("#bOk").addEventListener("click", ()=>{
   else salvarDecisao(cur,"ok","");
 });
 $("#bNo").addEventListener("click", ()=>{
-  if((ESTADO[cur]||{}).status==="ajuste"){ limparDecisao(cur); $("#fix").hidden = true; return; }
+  const e = ESTADO[cur] || {};
+  if(e.status==="ajuste" && e.nota && !editAjuste){
+    editAjuste = true;
+    showDec(cur);
+    $("#fixText").focus({preventScroll:false});
+    return;
+  }
+  if(e.status==="ajuste"){ editAjuste = false; limparDecisao(cur); return; }
   $("#bOk").setAttribute("aria-pressed","false");
   $("#bNo").setAttribute("aria-pressed","true");
+  editAjuste = true;
   $("#fix").hidden = false;
+  $("#fixEdit").hidden = false;
+  $("#sentAdjust").hidden = true;
   $("#fixText").focus({preventScroll:false});
   note("");
 });
 $("#fixText").addEventListener("input", e=>{ $("#bSend").disabled = !e.target.value.trim(); });
-$("#bSend").addEventListener("click", ()=>salvarDecisao(cur,"ajuste",$("#fixText").value.trim()));
+$("#bSend").addEventListener("click", ()=>{
+  editAjuste = false;
+  salvarDecisao(cur,"ajuste",$("#fixText").value.trim());
+});
 
 async function marcarPub(qual){
   const i = cur;
@@ -461,7 +478,7 @@ let cur = -1, idx = 0, opener = null, vTimer = null;
 const track = $("#track");
 
 function open(i, from){
-  cur = i; idx = 0; opener = from || null;
+  cur = i; idx = 0; opener = from || null; editAjuste = false;
   const p = POSTS[i], sl = slides(p);
   stopVideo();
   $(".media").classList.toggle("formato-reel", p.tipo==="reel");
