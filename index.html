@@ -151,6 +151,10 @@ img{max-width:100%}
 .send:disabled{opacity:.4;cursor:not-allowed}
 .note{margin:12px 0 0;font-size:12px;color:var(--muted);min-height:1.5em}
 .note.err{color:var(--fix)}
+.sentAdjust{margin-top:10px;padding:12px 14px;border-radius:12px;background:var(--bg);border:1.5px solid var(--fix)}
+.sentAdjust[hidden]{display:none}
+.sentAdjust .label{color:var(--fix);margin:0 0 4px}
+.sentAdjust p{margin:0;font-size:13px;line-height:1.5;white-space:pre-wrap}
 
 .side-arrow{position:fixed;top:50%;z-index:51;width:44px;height:44px;margin-top:-22px;border-radius:50%;background:rgba(255,255,255,.92);color:#222;display:grid;place-items:center;box-shadow:0 4px 18px rgba(0,0,0,.3)}
 .side-arrow svg{width:20px;height:20px}
@@ -239,6 +243,10 @@ img{max-width:100%}
           <label class="label" for="fixText">O que precisa mudar?</label>
           <textarea id="fixText" placeholder="Ex.: trocar a foto do slide 2, deixar a legenda mais curta..."></textarea>
           <button class="send" id="bSend" disabled>Enviar ajuste</button>
+        </div>
+        <div class="sentAdjust" id="sentAdjust" hidden>
+          <p class="label">Ajuste enviado</p>
+          <p id="sentAdjustText"></p>
         </div>
         <p class="note" id="decNote" role="status"></p>
       </section>
@@ -382,8 +390,11 @@ function showDec(i){
   $("#bOk").setAttribute("aria-pressed", String(e.status==="ok"));
   $("#bNo").setAttribute("aria-pressed", String(e.status==="ajuste"));
   $("#fix").hidden = e.status!=="ajuste";
-  $("#fixText").value = e.nota || "";
+  const jaEnviado = e.status==="ajuste" && e.nota;
+  $("#fixText").value = jaEnviado ? "" : (e.nota || "");
   $("#bSend").disabled = !$("#fixText").value.trim();
+  $("#sentAdjust").hidden = !jaEnviado;
+  $("#sentAdjustText").textContent = jaEnviado ? e.nota : "";
   note(e.status ? "Resposta salva. Você pode mudar quando quiser." : "");
 }
 function note(t, err){ const n = $("#decNote"); n.textContent = t; n.classList.toggle("err", !!err); }
