@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aprovação Respira</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+[hidden]{display:none!important}
+:root{
+  --bg:#F3F3F4; --side:#F8F8F9; --card:#FFFFFF; --ink:#242427; --muted:#6E6E75; --line:#E3E3E6;
+  --navy:#38383E; --rose:#55555C; --shadow:rgba(20,20,22,.16);
+  --ok:#2F7D5B; --fix:#B4532A; --posted:#2D5F8B; --sched:#7A5A9E;
+  --serif:'Playfair Display',Georgia,'Times New Roman',serif;
+  --sans:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#17171A; --side:#1C1C20; --card:#232326; --ink:#EDEDEE; --muted:#9B9BA1; --line:#2E2E33; --shadow:rgba(0,0,0,.5);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#17171A; --side:#1C1C20; --card:#232326; --ink:#EDEDEE; --muted:#9B9BA1; --line:#2E2E33; --shadow:rgba(0,0,0,.5);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0}
+:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+img{max-width:100%}
+
+.app{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100dvh;max-width:1500px;margin-inline:auto}
+
+.side{background:var(--side);border-right:1px solid var(--line);padding:28px 22px;position:sticky;top:env(safe-area-inset-top,0px);height:100dvh;overflow-y:auto}
+.brand{font-family:var(--serif);font-weight:700;font-size:20px;letter-spacing:-.01em}
+.brand small{display:block;font-family:var(--sans);font-weight:400;font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-top:2px}
+.client{margin:34px 0 4px;font-family:var(--serif);font-size:30px;line-height:1.1;font-weight:500}
+.month{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0}
+.handle{font-size:12px;color:var(--muted);margin:2px 0 0}
+.list-title{margin:30px 0 10px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.summary{margin:0 0 12px;font-size:12px;color:var(--muted)}
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.item{width:100%;display:flex;align-items:center;gap:12px;padding:7px 8px;border-radius:12px;text-align:left;transition:background .15s}
+.item:hover{background:color-mix(in srgb,var(--rose) 12%,transparent)}
+.item[aria-current="true"]{background:color-mix(in srgb,var(--rose) 20%,transparent)}
+.num{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--muted);display:grid;place-items:center;font-size:10px;color:var(--muted)}
+.thumb{flex:none;width:38px;height:46px;border-radius:7px;overflow:hidden;background:var(--navy);position:relative}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.tema{flex:1;font-weight:500;font-size:13px;min-width:0;overflow:hidden}
+.tema span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tema small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
+.tipo{flex:none;color:var(--muted);display:flex}
+.tipo svg{width:15px;height:15px}
+
+.main{padding:32px clamp(16px,4vw,48px) 56px}
+.profile{display:flex;align-items:center;gap:22px;max-width:780px;margin:0 auto 28px}
+.avatar{flex:none;width:84px;height:84px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--rose));display:grid;place-items:center;color:#fff;font-family:var(--serif);font-size:32px;font-weight:700;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.profile h1{margin:0;font-size:18px;font-weight:600;display:flex;align-items:center;gap:6px}
+.verified{width:16px;height:16px}
+.stats{display:flex;gap:22px;margin:8px 0 6px;font-size:13px;color:var(--muted)}
+.stats b{color:var(--ink);font-weight:600}
+.bio{margin:0;font-size:13px;max-width:44ch}
+.grid{max-width:780px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.cell{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--navy);border-radius:4px;min-width:0;min-height:0}
+.cell.placeholder{cursor:default;background:linear-gradient(160deg,var(--navy),#0c0c0f)}
+.cell.placeholder .ag{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:14px;font-size:12px;font-weight:600;letter-spacing:.03em;color:rgba(255,255,255,.55)}
+.cell.placeholder .badge{opacity:.55}
+.item.placeholder{cursor:default}
+.item.placeholder:hover{background:none}
+.item.placeholder .thumb{background:linear-gradient(160deg,var(--navy),#0c0c0f)}
+.item.placeholder .tema small{color:var(--muted)}
+.cell img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
+.cell:hover img{transform:scale(1.03)}
+.cell .badge{position:absolute;top:8px;left:8px;height:24px;padding:0 9px;border-radius:12px;background:rgba(20,20,30,.62);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;gap:6px;backdrop-filter:blur(4px)}
+.cell .badge .n{opacity:.7;font-weight:500}
+.cell .kind{position:absolute;top:8px;right:8px;color:#fff;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
+.cell .kind svg{width:18px;height:18px;display:block}
+.st{position:absolute;display:none;font-style:normal;left:8px;bottom:8px;padding:3px 9px;border-radius:12px;font-size:10px;font-weight:600;color:#fff}
+.st:not([data-s=""]){display:block}
+.st[data-s="ok"]{background:var(--ok)}
+.st[data-s="ajuste"]{background:var(--fix)}
+.st[data-s="agendado"]{background:var(--sched)}
+.st[data-s="postado"]{background:var(--posted)}
+.st[data-s="ok"]::after{content:"Aprovado"}
+.st[data-s="ajuste"]::after{content:"Ajuste pedido"}
+.st[data-s="agendado"]::after{content:"Agendado"}
+.st[data-s="postado"]::after{content:"Postado"}
+.thumb .st{left:auto;right:3px;bottom:3px;width:12px;height:12px;padding:0;border-radius:50%;border:2px solid var(--side)}
+.thumb .st::after{content:""!important}
+
+.modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px;background:rgba(32,24,22,.62);backdrop-filter:blur(6px)}
+.modal[hidden]{display:none}
+.sheet{width:min(440px,100%);max-height:calc(100dvh - 32px);overflow-y:auto;background:var(--card);border-radius:22px;box-shadow:0 30px 80px var(--shadow);overscroll-behavior:contain}
+.when{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.when .d{flex:1;text-align:center;font-size:13px;line-height:1.3}
+.when .d b{display:block;font-weight:600;font-size:14px}
+.when .d span{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.pnav{flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center}
+.pnav:disabled{opacity:.3;cursor:default}
+.pnav svg{width:16px;height:16px}
+.media{position:relative;aspect-ratio:4/5;background:var(--navy);overflow:hidden;transition:aspect-ratio .15s;min-height:0}
+.media.formato-reel{aspect-ratio:9/16}
+.track{display:flex;width:100%;height:100%;min-height:0;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;cursor:grab}
+.track::-webkit-scrollbar{display:none}
+.track.drag{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto}
+.slide{flex:0 0 100%;width:100%;height:100%;min-width:0;min-height:0;scroll-snap-align:center;user-select:none;overflow:hidden}
+.slide img,.slide video{width:100%;height:100%;object-fit:cover;display:block;-webkit-user-drag:none}
+.pill{position:absolute;top:14px;left:14px;padding:3px 10px;border-radius:12px;background:rgba(20,20,30,.62);color:#fff;font-size:11px;backdrop-filter:blur(4px)}
+.close{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;background:rgba(20,20,30,.62);color:#fff;display:grid;place-items:center;backdrop-filter:blur(4px)}
+.arrow{position:absolute;top:50%;width:36px;height:36px;margin-top:-18px;border-radius:50%;background:rgba(255,255,255,.88);color:#222;display:grid;place-items:center;box-shadow:0 2px 10px rgba(0,0,0,.25);transition:opacity .15s}
+.arrow[hidden]{display:none}
+.arrow.prev{left:10px}.arrow.next{right:10px}
+.arrow svg,.close svg{width:16px;height:16px}
+.dots{display:flex;justify-content:center;gap:5px;padding:12px 0 2px}
+.dots span{width:6px;height:6px;border-radius:3px;background:var(--line);transition:width .2s,background .2s}
+.dots span.on{width:20px;background:var(--ink)}
+.dots:empty{display:none}
+.info{padding:16px 20px 22px}
+.meta{margin:0;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.meta b{color:var(--rose);font-weight:600}
+.info h2{margin:8px 0 14px;font-family:var(--serif);font-size:19px;line-height:1.25;font-weight:700}
+.label{margin:0 0 4px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.cap{margin:0;white-space:pre-line;line-height:1.65;color:color-mix(in srgb,var(--ink) 88%,transparent)}
+
+.vctl{position:absolute;left:0;right:0;bottom:0;padding:34px 14px 14px;background:linear-gradient(transparent,rgba(0,0,0,.6));display:flex;align-items:center;gap:12px}
+.play{flex:none;width:40px;height:40px;border-radius:50%;background:#fff;color:#111;display:grid;place-items:center}
+.play svg{width:16px;height:16px}
+.bar{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.35);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:#fff}
+
+.dec{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.dec-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.btn{height:46px;border-radius:12px;border:1.5px solid var(--line);font-weight:600;font-size:13px;background:transparent;transition:background .15s,color .15s,border-color .15s}
+.btn.ok{border-color:var(--ok);color:var(--ok)}
+.btn.no{border-color:var(--fix);color:var(--fix)}
+.btn.ok[aria-pressed="true"]{background:var(--ok);color:#fff}
+.btn.no[aria-pressed="true"]{background:var(--fix);color:#fff}
+.btn.sched{border-color:var(--sched);color:var(--sched)}
+.btn.sched[aria-pressed="true"]{background:var(--sched);color:#fff}
+.btn.post{border-color:var(--posted);color:var(--posted)}
+.btn.post[aria-pressed="true"]{background:var(--posted);color:#fff}
+.fix{margin-top:14px}
+.fix[hidden]{display:none}
+.fix textarea{width:100%;min-height:104px;margin-top:6px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit;line-height:1.5;resize:vertical}
+.send{width:100%;height:46px;margin-top:10px;border-radius:12px;background:var(--ink);color:var(--card);font-weight:600;font-size:13px}
+.send:disabled{opacity:.4;cursor:not-allowed}
+.note{margin:12px 0 0;font-size:12px;color:var(--muted);min-height:1.5em}
+.note.err{color:var(--fix)}
+
+.side-arrow{position:fixed;top:50%;z-index:51;width:44px;height:44px;margin-top:-22px;border-radius:50%;background:rgba(255,255,255,.92);color:#222;display:grid;place-items:center;box-shadow:0 4px 18px rgba(0,0,0,.3)}
+.side-arrow svg{width:20px;height:20px}
+.side-arrow[hidden]{display:none}
+.side-arrow.left{left:max(16px,calc(50% - 290px))}
+.side-arrow.right{right:max(16px,calc(50% - 290px))}
+
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .side{position:static;height:auto;padding:18px 16px 10px;border-right:0;border-bottom:1px solid var(--line)}
+  .client{margin:14px 0 2px;font-size:24px}
+  .list-title{margin:16px 0 6px}
+  .list{flex-direction:row;overflow-x:auto;gap:8px;padding-bottom:8px;scrollbar-width:none}
+  .list::-webkit-scrollbar{display:none}
+  .item{flex-direction:column;width:auto;gap:5px;padding:4px;min-width:62px}
+  .num,.tipo{display:none}
+  .tema{font-size:10px;max-width:62px;text-align:center}
+  .tema small{display:none}
+  .main{padding-top:22px}
+  .profile{gap:14px}
+  .avatar{width:64px;height:64px;font-size:24px}
+  .modal{padding:0;align-items:end}
+  .sheet{width:100%;max-height:96dvh;border-radius:22px 22px 0 0}
+  .side-arrow{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="side">
+    <div class="brand">Aprovação de posts<small>Prévia do Instagram</small></div>
+    <h2 class="client" id="clientName"></h2>
+    <p class="handle" id="clientHandle"></p>
+    <p class="list-title">Os posts, em ordem de publicação</p>
+    <p class="summary" id="summary">Carregando…</p>
+    <ul class="list" id="list"></ul>
+  </aside>
+
+  <main class="main">
+    <header class="profile">
+      <div class="avatar" id="avatar"></div>
+      <div>
+        <h1><span id="pName"></span>
+          <svg class="verified" viewBox="0 0 24 24" aria-label="Verificado"><path fill="#3897f0" d="M12 1.5l2.6 1.9 3.2-.2 1 3 2.7 1.8-.9 3.1.9 3.1-2.7 1.8-1 3-3.2-.2L12 22.5l-2.6-1.9-3.2.2-1-3-2.7-1.8.9-3.1-.9-3.1 2.7-1.8 1-3 3.2.2z"/><path fill="none" stroke="#fff" stroke-width="2" d="M8 12.2l2.8 2.8L16.5 9"/></svg>
+        </h1>
+        <div class="stats"><span><b id="pCount"></b> publicações</span></div>
+        <p class="bio" id="pBio"></p>
+      </div>
+    </header>
+    <section class="grid" id="grid" aria-label="Feed"></section>
+  </main>
+</div>
+
+<button class="side-arrow left" id="pPrevOut" aria-label="Post anterior" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+<button class="side-arrow right" id="pNextOut" aria-label="Próximo post" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+
+<div class="modal" id="modal" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="when">
+      <button class="pnav" id="pPrev" aria-label="Post anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <p class="d" id="mWhen"></p>
+      <button class="pnav" id="pNext" aria-label="Próximo post"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="media">
+      <div class="track" id="track"></div>
+      <span class="pill" id="counter"></span>
+      <button class="close" id="close" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <button class="arrow prev" id="prev" aria-label="Slide anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="arrow next" id="next" aria-label="Próximo slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="dots" id="dots"></div>
+    <div class="info">
+      <p class="meta" id="mMeta"></p>
+      <h2 id="mTitle"></h2>
+      <p class="label">Legenda</p>
+      <p class="cap" id="mCap"></p>
+      <section class="dec" aria-labelledby="decTitle">
+        <p class="label" id="decTitle">O que você quer fazer?</p>
+        <div class="dec-btns">
+          <button class="btn ok" id="bOk" aria-pressed="false">Aprovar</button>
+          <button class="btn no" id="bNo" aria-pressed="false">Pedir ajuste</button>
+        </div>
+        <div class="fix" id="fix" hidden>
+          <label class="label" for="fixText">O que precisa mudar?</label>
+          <textarea id="fixText" placeholder="Ex.: trocar a foto do slide 2, deixar a legenda mais curta..."></textarea>
+          <button class="send" id="bSend" disabled>Enviar ajuste</button>
+        </div>
+        <p class="note" id="decNote" role="status"></p>
+      </section>
+      <section class="dec" aria-labelledby="postTitle" id="pubSection" hidden>
+        <p class="label" id="postTitle">Publicação</p>
+        <div class="dec-btns">
+          <button class="btn sched" id="bSched" aria-pressed="false">Agendado</button>
+          <button class="btn post" id="bPost" aria-pressed="false">Postado</button>
+        </div>
+        <p class="note" id="postedAt"></p>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="posts_data.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const ICON = {
+  carrossel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="7" width="13" height="13" rx="2.5"/><path d="M8 4h10a3 3 0 013 3v10" stroke-linecap="round"/></svg>',
+  reel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4.5"/><path d="M10 8.5l5 3.5-5 3.5z" fill="currentColor"/></svg>',
+  imagem:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9.5" r="1.8"/><path d="M4 18l5.5-5 4 3.5 3-2.5L21 17" stroke-linecap="round"/></svg>'
+};
+const TIPO_LABEL = {carrossel:"Carrossel", reel:"Reel · vídeo", imagem:"Imagem"};
+const SVG_PLAY = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>';
+const SVG_PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>';
+const pad = n => String(n+1).padStart(2,"0");
+const esc = t => String(t||"").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const DIAS = ["domingo","segunda","terça","quarta","quinta","sexta","sábado"];
+const MESES = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+const dt = p => { const [y,m,d] = (p.data||"").split("-").map(Number); return y ? new Date(y,m-1,d) : null; };
+const dataCurta = p => { const d = dt(p); return d ? String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0") : ""; };
+const dataLonga = p => { const d = dt(p); return d ? DIAS[d.getDay()]+", "+d.getDate()+" de "+MESES[d.getMonth()] : ""; };
+
+function slides(p){
+  if(p.tipo==="reel") return [{video:p.video, img:p.poster}];
+  return p.slides && p.slides.length ? p.slides : [{}];
+}
+function art(s){
+  return s.img ? `<img src="${esc(s.img)}" alt="" loading="lazy" draggable="false">` : "";
+}
+
+/* ---- barra lateral, perfil e grade ---- */
+function build(){
+  $("#clientName").textContent = CLIENTE.nome;
+  $("#clientHandle").textContent = "@"+CLIENTE.usuario+" · "+POSTS.length+" publicações";
+  $("#avatar").innerHTML = CLIENTE.logo ? `<img src="${esc(CLIENTE.logo)}" alt="">` : esc(CLIENTE.iniciais);
+  $("#pName").textContent = CLIENTE.usuario;
+  $("#pCount").textContent = POSTS.length;
+  $("#pBio").textContent = CLIENTE.bio;
+  document.title = "Aprovação · "+CLIENTE.nome;
+
+  $("#list").innerHTML = POSTS.map((p,i)=>{
+    if(p.placeholder) return `
+    <li><div class="item placeholder">
+      <span class="num">${pad(i)}</span>
+      <span class="thumb"></span>
+      <span class="tema"><span>Aguardando episódio</span><small>${dataCurta(p)} · ${DIAS[dt(p).getDay()].slice(0,3)}</small></span>
+    </div></li>`;
+    return `
+    <li><button class="item" data-i="${i}">
+      <span class="num">${pad(i)}</span>
+      <span class="thumb">${art(slides(p)[0])}<i class="st" data-s=""></i></span>
+      <span class="tema"><span>${esc(p.tema)}</span><small>${dataCurta(p)} · ${DIAS[dt(p).getDay()].slice(0,3)}</small></span>
+      <span class="tipo" title="${TIPO_LABEL[p.tipo]}">${ICON[p.tipo]}</span>
+    </button></li>`;
+  }).join("");
+
+  const ordemFeed = POSTS.map((_,i)=>i).sort((a,b)=>b-a);
+  $("#grid").innerHTML = ordemFeed.map(i=>{
+    const p = POSTS[i];
+    if(p.placeholder) return `
+    <div class="cell placeholder" aria-label="Aguardando episódio, ${dataLonga(p)}">
+      <span class="badge"><span class="n">${i+1}</span>${dataCurta(p)}</span>
+      <span class="ag">Aguardando episódio</span>
+    </div>`;
+    return `
+    <button class="cell" data-i="${i}" aria-label="Abrir post ${i+1}, ${dataLonga(p)}: ${esc(p.titulo)}">
+      ${art(slides(p)[0])}
+      <span class="badge"><span class="n">${i+1}</span>${dataCurta(p)}</span>
+      <i class="st" data-s=""></i>
+      <span class="kind">${ICON[p.tipo]}</span>
+    </button>`;
+  }).join("");
+}
+
+/* ---- Firebase (banco de dados compartilhado) ---- */
+const firebaseConfig = {
+  apiKey: "AIzaSyBqSOQVsK3vdb3lPuyVi5-h0muM_EqcFNs",
+  authDomain: "respira-podcast.firebaseapp.com",
+  projectId: "respira-podcast",
+  storageBucket: "respira-podcast.firebasestorage.app",
+  messagingSenderId: "920025912795",
+  appId: "1:920025912795:web:ca1064a2ac775761ed43fe"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+/* ---- quem sou eu neste navegador ---- */
+let MEU_ID = null;
+try{
+  MEU_ID = localStorage.getItem("respira_id");
+  if(!MEU_ID){ MEU_ID = "v-"+Math.random().toString(36).slice(2,10); localStorage.setItem("respira_id", MEU_ID); }
+}catch(e){}
+
+let souDono = false;
+if(location.hash === "#admin"){
+  try{ localStorage.setItem("respira_admin","1"); }catch(e){}
+  history.replaceState(null,"", location.pathname + location.search);
+}
+try{ souDono = localStorage.getItem("respira_admin") === "1"; }catch(e){}
+$("#pubSection").hidden = !souDono;
+
+let ESTADO = {}; // i -> {status, nota}
+let POSTADO = {}; // i -> timestamp
+let AGENDADO = {}; // i -> timestamp
+let pronto = false;
+
+function paintStatus(){
+  POSTS.forEach((p,i)=>{
+    if(p.placeholder) return;
+    const s = POSTADO[i] ? "postado" : AGENDADO[i] ? "agendado" : ((ESTADO[i] && ESTADO[i].status) || "");
+    document.querySelectorAll(`[data-i="${i}"] .st`).forEach(el=>{ el.dataset.s = s; });
+  });
+  const total = POSTS.filter(p=>!p.placeholder).length;
+  const v = Object.values(ESTADO);
+  const ok = v.filter(x=>x.status==="ok").length, aj = v.filter(x=>x.status==="ajuste").length;
+  const falta = total - ok - aj;
+  const np = Object.keys(POSTADO).filter(k=>POSTADO[k]).length;
+  const na = Object.keys(AGENDADO).filter(k=>AGENDADO[k]).length;
+  $("#summary").textContent = pronto
+    ? (falta===0 ? "Tudo respondido: "+ok+" aprovados, "+aj+" com ajuste." : ok+" aprovados · "+aj+" com ajuste · "+falta+" sem resposta")
+      + " · "+na+" agendados · "+np+" de "+total+" postados"
+    : "Carregando…";
+}
+
+function showDec(i){
+  const e = ESTADO[i] || {};
+  $("#bOk").setAttribute("aria-pressed", String(e.status==="ok"));
+  $("#bNo").setAttribute("aria-pressed", String(e.status==="ajuste"));
+  $("#fix").hidden = e.status!=="ajuste";
+  $("#fixText").value = e.nota || "";
+  $("#bSend").disabled = !$("#fixText").value.trim();
+  note(e.status ? "Resposta salva. Você pode mudar quando quiser." : "");
+}
+function note(t, err){ const n = $("#decNote"); n.textContent = t; n.classList.toggle("err", !!err); }
+function showPost(i){
+  const em = POSTADO[i], ag = AGENDADO[i];
+  $("#bPost").setAttribute("aria-pressed", String(!!em));
+  $("#bSched").setAttribute("aria-pressed", String(!!ag));
+  $("#bPost").textContent = em ? "Postado ✓" : "Postado";
+  $("#bSched").textContent = ag ? "Agendado ✓" : "Agendado";
+  $("#postedAt").textContent = em ? "Marcado como postado em "+new Date(em).toLocaleDateString("pt-BR")+". Toque de novo para desmarcar."
+    : ag ? "Marcado como agendado em "+new Date(ag).toLocaleDateString("pt-BR")+". Toque de novo para desmarcar." : "";
+}
+
+async function salvarDecisao(i, status, nota){
+  ESTADO[i] = {status, nota: nota||""};
+  paintStatus(); showDec(i); note("Salvando...");
+  try{
+    await db.collection("posts").doc(String(i)).set({status, nota: nota||"", por: MEU_ID, em: Date.now()});
+    note("Resposta salva. Você pode mudar quando quiser.");
+  }catch(e){ note("Não deu para salvar agora. Toque de novo para tentar.", true); }
+}
+$("#bOk").addEventListener("click", ()=>salvarDecisao(cur,"ok",""));
+$("#bNo").addEventListener("click", ()=>{
+  $("#bOk").setAttribute("aria-pressed","false");
+  $("#bNo").setAttribute("aria-pressed","true");
+  $("#fix").hidden = false;
+  $("#fixText").focus({preventScroll:false});
+  note("");
+});
+$("#fixText").addEventListener("input", e=>{ $("#bSend").disabled = !e.target.value.trim(); });
+$("#bSend").addEventListener("click", ()=>salvarDecisao(cur,"ajuste",$("#fixText").value.trim()));
+
+async function marcarPub(qual){
+  const i = cur;
+  const mapa = qual==="postado" ? POSTADO : AGENDADO;
+  const outroMapa = qual==="postado" ? AGENDADO : POSTADO;
+  const ligar = !mapa[i];
+  if(ligar){ mapa[i] = Date.now(); delete outroMapa[i]; } else { delete mapa[i]; }
+  paintStatus(); showPost(i);
+  try{
+    await db.collection("publicacao").doc(String(i)).set({
+      postado: POSTADO[i]||null,
+      agendado: AGENDADO[i]||null, por: MEU_ID, em: Date.now()
+    });
+  }catch(e){}
+}
+$("#bPost").addEventListener("click", ()=>marcarPub("postado"));
+$("#bSched").addEventListener("click", ()=>marcarPub("agendado"));
+
+/* ---- janela do post ---- */
+let cur = -1, idx = 0, opener = null, vTimer = null;
+const track = $("#track");
+
+function open(i, from){
+  cur = i; idx = 0; opener = from || null;
+  const p = POSTS[i], sl = slides(p);
+  stopVideo();
+  $(".media").classList.toggle("formato-reel", p.tipo==="reel");
+  track.innerHTML = sl.map((s)=>{
+    if(p.tipo==="reel"){
+      const poster = s.img ? `poster="${esc(s.img)}"` : "";
+      const media = s.video ? `<video playsinline preload="metadata" ${poster} src="${esc(s.video)}"></video>` : "";
+      return `<div class="slide">${media}</div>`;
+    }
+    return `<div class="slide">${art(s)}</div>`;
+  }).join("");
+  track.scrollLeft = 0;
+
+  document.querySelectorAll(".vctl").forEach(n=>n.remove());
+  if(p.tipo==="reel"){
+    const c = document.createElement("div");
+    c.className = "vctl";
+    c.innerHTML = `<button class="play" aria-label="Reproduzir">${SVG_PLAY}</button><div class="bar"><i></i></div>`;
+    $(".media").appendChild(c);
+    c.querySelector(".play").addEventListener("click", toggleVideo);
+  }
+
+  $("#dots").innerHTML = sl.length>1 ? sl.map((_,k)=>`<span class="${k?"":"on"}"></span>`).join("") : "";
+  $("#mWhen").innerHTML = `<span>Post ${pad(i)} de ${POSTS.length} · postar em</span><b>${esc(dataLonga(p))}</b>`;
+  $("#pPrev").disabled = i===0; $("#pNext").disabled = i===POSTS.length-1;
+  $("#pPrevOut").hidden = i===0; $("#pNextOut").hidden = i===POSTS.length-1;
+  $("#mMeta").innerHTML = `Post ${pad(i)} &nbsp;·&nbsp; ${esc(dataCurta(p))} &nbsp;·&nbsp; <b>${TIPO_LABEL[p.tipo]}${p.tipo==="carrossel"?" · "+sl.length+" imagens":""}</b>`;
+  $("#mTitle").textContent = p.titulo;
+  $("#mCap").textContent = p.legenda;
+  $(".sheet").scrollTop = 0;
+  showDec(i); showPost(i);
+  sync();
+  document.querySelectorAll(".item").forEach(b=>b.setAttribute("aria-current", String(+b.dataset.i===i)));
+  const jaAberto = !$("#modal").hidden;
+  $("#modal").hidden = false;
+  document.body.style.overflow = "hidden";
+  if(!jaAberto) $("#close").focus({preventScroll:true});
+}
+function close(){
+  stopVideo();
+  $("#modal").hidden = true;
+  document.body.style.overflow = "";
+  document.querySelectorAll(".item").forEach(b=>b.setAttribute("aria-current","false"));
+  if(opener) opener.focus({preventScroll:true});
+}
+function goPost(d){
+  const j = cur + d;
+  if(j<0 || j>=POSTS.length) return;
+  const o = opener; open(j, null); opener = o;
+}
+function sync(){
+  const n = slides(POSTS[cur]).length;
+  $("#counter").textContent = n>1 ? (idx+1)+" / "+n : TIPO_LABEL[POSTS[cur].tipo];
+  document.querySelectorAll("#dots span").forEach((d,k)=>d.classList.toggle("on", k===idx));
+  $("#prev").hidden = idx===0 || n<2;
+  $("#next").hidden = idx===n-1 || n<2;
+}
+function go(d){
+  const n = slides(POSTS[cur]).length;
+  const t = Math.max(0, Math.min(n-1, idx+d));
+  track.scrollTo({left: t*track.clientWidth, behavior:"smooth"});
+}
+let raf = 0;
+track.addEventListener("scroll", ()=>{
+  cancelAnimationFrame(raf);
+  raf = requestAnimationFrame(()=>{
+    const k = Math.round(track.scrollLeft / track.clientWidth);
+    if(k!==idx){ idx = k; sync(); }
+  });
+});
+
+let dragX = null, startL = 0, moved = false;
+track.addEventListener("pointerdown", e=>{
+  if(e.pointerType!=="mouse") return;
+  dragX = e.clientX; startL = track.scrollLeft; moved = false;
+});
+window.addEventListener("pointermove", e=>{
+  if(dragX===null) return;
+  const dx = e.clientX - dragX;
+  if(Math.abs(dx)>4){ moved = true; track.classList.add("drag"); }
+  track.scrollLeft = startL - dx;
+});
+window.addEventListener("pointerup", ()=>{
+  if(dragX===null) return;
+  dragX = null;
+  if(!moved) return;
+  track.classList.remove("drag");
+  const k = Math.round(track.scrollLeft / track.clientWidth);
+  track.scrollTo({left:k*track.clientWidth, behavior:"smooth"});
+});
+
+let playing = false, fake = 0;
+function toggleVideo(){
+  const v = track.querySelector("video"), btn = document.querySelector(".play"), bar = document.querySelector(".bar i");
+  if(playing){ stopVideo(); return; }
+  playing = true; btn.innerHTML = SVG_PAUSE; btn.setAttribute("aria-label","Pausar");
+  if(v){
+    v.play();
+    v.ontimeupdate = ()=>{ bar.style.width = (v.currentTime/v.duration*100)+"%"; };
+    v.onended = stopVideo;
+  } else {
+    vTimer = setInterval(()=>{
+      fake += 1;
+      bar.style.width = Math.min(100, fake/120*100)+"%";
+      if(fake>=120) stopVideo(true);
+    }, 100);
+  }
+}
+function stopVideo(reset){
+  playing = false;
+  clearInterval(vTimer);
+  const v = track.querySelector("video"); if(v) v.pause();
+  const btn = document.querySelector(".play"), bar = document.querySelector(".bar i");
+  if(btn){ btn.innerHTML = SVG_PLAY; btn.setAttribute("aria-label","Reproduzir"); }
+  if(reset===true){ fake = 0; if(bar) bar.style.width = "0"; }
+}
+
+document.addEventListener("click", e=>{
+  const b = e.target.closest("[data-i]");
+  if(b && !b.closest(".modal")) open(+b.dataset.i, b);
+  if(e.target === $("#modal")) close();
+});
+$("#close").addEventListener("click", close);
+$("#prev").addEventListener("click", ()=>go(-1));
+$("#next").addEventListener("click", ()=>go(1));
+$("#pPrev").addEventListener("click", ()=>goPost(-1));
+$("#pNext").addEventListener("click", ()=>goPost(1));
+$("#pPrevOut").addEventListener("click", e=>{ e.stopPropagation(); goPost(-1); });
+$("#pNextOut").addEventListener("click", e=>{ e.stopPropagation(); goPost(1); });
+document.addEventListener("keydown", e=>{
+  if($("#modal").hidden) return;
+  if(e.target.tagName==="TEXTAREA") return;
+  if(e.key==="Escape") close();
+  const n = slides(POSTS[cur]).length;
+  if(e.key==="ArrowRight"){ if(idx<n-1) go(1); else goPost(1); }
+  if(e.key==="ArrowLeft"){ if(idx>0) go(-1); else goPost(-1); }
+});
+
+/* ---- inicialização ---- */
+function iniciar(){
+  build();
+  paintStatus();
+
+  db.collection("posts").onSnapshot(snap=>{
+    ESTADO = {};
+    snap.docs.forEach(d=>{ if(d.exists){ const data=d.data(); if(data) ESTADO[d.id]={status:data.status,nota:data.nota}; } });
+    pronto = true;
+    paintStatus(); if(cur>=0) showDec(cur);
+  }, e=>{ pronto = true; paintStatus(); });
+
+  db.collection("publicacao").onSnapshot(snap=>{
+    POSTADO = {}; AGENDADO = {};
+    snap.docs.forEach(d=>{ if(d.exists){ const data=d.data(); if(data){ if(data.postado) POSTADO[d.id]=data.postado; if(data.agendado) AGENDADO[d.id]=data.agendado; } } });
+    paintStatus(); if(cur>=0) showPost(cur);
+  });
+}
+iniciar();
+</script>
+</body>
+</html>
