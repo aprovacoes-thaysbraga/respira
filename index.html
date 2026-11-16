@@ -71,6 +71,15 @@ summary.list-title .count{color:var(--muted);font-weight:400;letter-spacing:0;te
 .avatar img{width:100%;height:100%;object-fit:cover;display:block}
 .profile h1{margin:0;font-size:18px;font-weight:600;display:flex;align-items:center;gap:6px}
 .verified{width:16px;height:16px}
+.legend{max-width:780px;margin:0 auto 16px;border:1px solid var(--line);border-radius:14px;font-size:13px}
+.legend summary{cursor:pointer;padding:11px 14px;font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);list-style:none;display:flex;justify-content:space-between;align-items:center}
+.legend summary::-webkit-details-marker{display:none}
+.legend summary::after{content:"+";font-size:16px;font-weight:500}
+.legend[open] summary::after{content:"–"}
+.legend ul{margin:0;padding:0 14px 12px;list-style:none;display:grid;gap:8px}
+.legend li{display:flex;align-items:center;gap:10px;line-height:1.35}
+.legend .chip{flex:none;min-width:92px;text-align:center;padding:3px 9px;border-radius:12px;font-size:10px;font-weight:600;color:#fff}
+.legend .chip.vazio{color:var(--muted);border:1px dashed var(--line);background:transparent}
 .stats{display:flex;gap:22px;margin:8px 0 6px;font-size:13px;color:var(--muted)}
 .stats b{color:var(--ink);font-weight:600}
 .bio{margin:0;font-size:13px;max-width:44ch}
@@ -98,6 +107,10 @@ summary.list-title .count{color:var(--muted);font-weight:400;letter-spacing:0;te
 .st[data-s="ok"]::after{content:"Aprovado"}
 .st[data-s="ajuste"]::after{content:"Ajuste pedido"}
 .st[data-s="agendado"]::after{content:"Agendado"}
+.st[data-s="agendado"][data-t]:not([data-t=""]){white-space:nowrap;max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis}
+.st[data-s="agendado"][data-t]:not([data-t=""])::after{content:attr(data-t)}
+.schedPub{margin:-4px 0 14px;font-size:13px;font-weight:600;color:var(--sched)}
+.schedPub[hidden]{display:none}
 .st[data-s="postado"]::after{content:"Postado"}
 .thumb .st{left:auto;right:3px;bottom:3px;width:12px;height:12px;padding:0;border-radius:50%;border:2px solid var(--side)}
 .thumb .st::after{content:""!important}
@@ -153,6 +166,11 @@ summary.list-title .count{color:var(--muted);font-weight:400;letter-spacing:0;te
 .btn.sched[aria-pressed="true"]{background:var(--sched);color:#fff}
 .btn.post{border-color:var(--posted);color:var(--posted)}
 .btn.post[aria-pressed="true"]{background:var(--posted);color:#fff}
+.agenda{margin-top:12px}
+.agenda-row{display:flex;gap:8px;margin-top:6px}
+.agenda input{flex:1;min-width:0;height:44px;padding:0 12px;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:inherit;font:inherit;font-size:14px}
+.agenda input:focus{outline:none;border-color:var(--sched)}
+.agenda .btn{flex:none;padding:0 16px}
 .fix{margin-top:14px}
 .fix[hidden]{display:none}
 .fix textarea{width:100%;min-height:104px;margin-top:6px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit;line-height:1.5;resize:vertical}
@@ -226,6 +244,16 @@ summary.list-title .count{color:var(--muted);font-weight:400;letter-spacing:0;te
         <p class="bio" id="pBio"></p>
       </div>
     </header>
+    <details class="legend" id="legend" open>
+      <summary>Como ler as etiquetas dos posts</summary>
+      <ul>
+        <li><span class="chip vazio">sem etiqueta</span><span>Ainda sem resposta: não foi aprovado nem teve ajuste pedido.</span></li>
+        <li><span class="chip" style="background:var(--ok)">Aprovado</span><span>Post aprovado, pronto para agendar.</span></li>
+        <li><span class="chip" style="background:var(--fix)">Ajuste pedido</span><span>Foi pedido um ajuste. Ele volta corrigido para nova aprovação.</span></li>
+        <li><span class="chip" style="background:var(--sched)">18/11 · 19h30</span><span>Data e hora em roxo: o post está agendado para esse dia e horário.</span></li>
+        <li><span class="chip" style="background:var(--posted)">Postado</span><span>Em azul: o post já foi publicado no Instagram.</span></li>
+      </ul>
+    </details>
     <section class="grid" id="grid" aria-label="Feed"></section>
   </main>
 </div>
@@ -251,6 +279,7 @@ summary.list-title .count{color:var(--muted);font-weight:400;letter-spacing:0;te
     <div class="info">
       <p class="meta" id="mMeta"></p>
       <h2 id="mTitle"></h2>
+      <p class="schedPub" id="mSched" hidden></p>
       <p class="label">Legenda</p>
       <p class="cap" id="mCap"></p>
       <section class="dec" aria-labelledby="decTitle">
@@ -277,6 +306,13 @@ summary.list-title .count{color:var(--muted);font-weight:400;letter-spacing:0;te
         <div class="dec-btns">
           <button class="btn sched" id="bSched" aria-pressed="false">Agendado</button>
           <button class="btn post" id="bPost" aria-pressed="false">Postado</button>
+        </div>
+        <div class="agenda">
+          <label class="label" for="schedAt">Data e hora do agendamento</label>
+          <div class="agenda-row">
+            <input type="datetime-local" id="schedAt">
+            <button class="btn sched" id="bSchedSave" disabled>Salvar</button>
+          </div>
         </div>
         <p class="note" id="postedAt"></p>
       </section>
@@ -408,15 +444,16 @@ let pronto = false;
 function paintStatus(){
   POSTS.forEach((p,i)=>{
     if(p.placeholder) return;
-    const s = POSTADO[i] ? "postado" : AGENDADO[i] ? "agendado" : ((ESTADO[i] && ESTADO[i].status) || "");
-    document.querySelectorAll(`[data-i="${i}"] .st`).forEach(el=>{ el.dataset.s = s; });
+    const s = postadoEm(i) ? "postado" : agendadoAtivo(i) ? "agendado" : ((ESTADO[i] && ESTADO[i].status) || "");
+    const t = s==="agendado" && horaDefinida(AGENDADO[i]) ? dataHoraCurta(AGENDADO[i]) : "";
+    document.querySelectorAll(`[data-i="${i}"] .st`).forEach(el=>{ el.dataset.s = s; el.dataset.t = t; });
   });
   const total = POSTS.filter(p=>!p.placeholder).length;
   const v = Object.values(ESTADO);
   const ok = v.filter(x=>x.status==="ok").length, aj = v.filter(x=>x.status==="ajuste").length;
   const falta = total - ok - aj;
-  const np = Object.keys(POSTADO).filter(k=>POSTADO[k]).length;
-  const na = Object.keys(AGENDADO).filter(k=>AGENDADO[k]).length;
+  const np = POSTS.filter((p,i)=>!p.placeholder && postadoEm(i)).length;
+  const na = POSTS.filter((p,i)=>!p.placeholder && agendadoAtivo(i)).length;
   $("#summary").textContent = pronto
     ? (falta===0 ? "Tudo respondido: "+ok+" aprovados, "+aj+" com ajuste." : ok+" aprovados · "+aj+" com ajuste · "+falta+" sem resposta")
       + " · "+na+" agendados · "+np+" de "+total+" postados"
@@ -438,14 +475,45 @@ function showDec(i){
   note(e.status ? "Resposta salva. Você pode mudar quando quiser." : "");
 }
 function note(t, err){ const n = $("#decNote"); n.textContent = t; n.classList.toggle("err", !!err); }
+/* passou o horário agendado: o post conta como postado (sem precisar marcar) */
+function postadoAuto(i){ const ag = AGENDADO[i]; return !POSTADO[i] && horaDefinida(ag) && ag <= Date.now(); }
+function postadoEm(i){ return POSTADO[i] || (postadoAuto(i) ? AGENDADO[i] : null); }
+function agendadoAtivo(i){ return AGENDADO[i] && !postadoEm(i) ? AGENDADO[i] : null; }
 function showPost(i){
-  const em = POSTADO[i], ag = AGENDADO[i];
+  const em = postadoEm(i), ag = agendadoAtivo(i);
+  const publico = !em && horaDefinida(ag);
+  $("#mSched").hidden = !publico;
+  $("#mSched").textContent = publico ? "Agendado para "+dataHora(ag) : "";
   $("#bPost").setAttribute("aria-pressed", String(!!em));
   $("#bSched").setAttribute("aria-pressed", String(!!ag));
   $("#bPost").textContent = em ? "Postado ✓" : "Postado";
   $("#bSched").textContent = ag ? "Agendado ✓" : "Agendado";
-  $("#postedAt").textContent = em ? "Marcado como postado em "+new Date(em).toLocaleDateString("pt-BR")+". Toque de novo para desmarcar."
-    : ag ? "Marcado como agendado em "+new Date(ag).toLocaleDateString("pt-BR")+". Toque de novo para desmarcar." : "";
+  $("#postedAt").textContent = postadoAuto(i) ? "Postado automaticamente em "+dataHora(em)+", no horário agendado. Toque em Postado para desmarcar."
+    : em ? "Marcado como postado em "+new Date(em).toLocaleDateString("pt-BR")+". Toque de novo para desmarcar."
+    : ag ? "Agendado para "+dataHora(ag)+". Toque em Agendado de novo para desmarcar." : "";
+  if(document.activeElement !== $("#schedAt")){
+    $("#schedAt").value = AGENDADO[i] ? paraInput(AGENDADO[i]) : "";
+    $("#bSchedSave").disabled = true;
+  }
+}
+/* horário escolhido no campo tem segundos zerados; marcações antigas (clique) não */
+function horaDefinida(ms){ return !!ms && ms % 60000 === 0; }
+function dataHoraCurta(ms){
+  const d = new Date(ms), z = n=>String(n).padStart(2,"0");
+  return z(d.getDate())+"/"+z(d.getMonth()+1)+" · "+d.getHours()+"h"+z(d.getMinutes());
+}
+function dataHora(ms){
+  const d = new Date(ms);
+  return d.toLocaleDateString("pt-BR",{weekday:"short",day:"2-digit",month:"2-digit"})+" às "
+    + d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+}
+function paraInput(ms){
+  const d = new Date(ms), z = n=>String(n).padStart(2,"0");
+  return d.getFullYear()+"-"+z(d.getMonth()+1)+"-"+z(d.getDate())+"T"+z(d.getHours())+":"+z(d.getMinutes());
+}
+function lerInput(){
+  const v = $("#schedAt").value; if(!v) return null;
+  const ms = new Date(v).getTime(); return isNaN(ms) ? null : ms;
 }
 
 async function salvarDecisao(i, status, nota){
@@ -494,20 +562,39 @@ $("#bSend").addEventListener("click", ()=>{
 
 async function marcarPub(qual){
   const i = cur;
-  const mapa = qual==="postado" ? POSTADO : AGENDADO;
-  const outroMapa = qual==="postado" ? AGENDADO : POSTADO;
-  const ligar = !mapa[i];
-  if(ligar){ mapa[i] = Date.now(); delete outroMapa[i]; } else { delete mapa[i]; }
+  if(qual==="postado"){
+    if(postadoEm(i)){ delete POSTADO[i]; delete AGENDADO[i]; }
+    else { POSTADO[i] = Date.now(); delete AGENDADO[i]; }
+  } else {
+    if(agendadoAtivo(i)) delete AGENDADO[i];
+    else { AGENDADO[i] = lerInput() || Date.now(); delete POSTADO[i]; }
+  }
   paintStatus(); showPost(i);
+  await gravarPub(i);
+}
+async function salvarHorario(){
+  const i = cur, ms = lerInput();
+  if(!ms) return;
+  AGENDADO[i] = ms; delete POSTADO[i];
+  paintStatus(); showPost(i);
+  await gravarPub(i);
+}
+async function gravarPub(i){
   try{
     await db.collection("publicacao").doc(String(i)).set({
       postado: POSTADO[i]||null,
       agendado: AGENDADO[i]||null, por: MEU_ID, em: Date.now()
     });
-  }catch(e){}
+  }catch(e){ if(i===cur) $("#postedAt").textContent = "Não deu para salvar agora. Tente de novo."; }
 }
 $("#bPost").addEventListener("click", ()=>marcarPub("postado"));
 $("#bSched").addEventListener("click", ()=>marcarPub("agendado"));
+$("#schedAt").addEventListener("input", ()=>{
+  const ms = lerInput();
+  $("#bSchedSave").disabled = !ms || ms === AGENDADO[cur];
+});
+$("#bSchedSave").addEventListener("click", salvarHorario);
+setInterval(()=>{ if(!pronto) return; paintStatus(); if(cur>=0 && !$("#modal").hidden) showPost(cur); }, 30000);
 
 /* ---- janela do post ---- */
 let cur = -1, idx = 0, opener = null, vTimer = null;

@@ -89,7 +89,18 @@ const POSTS = [
     ] },
   { data:"2026-11-23", tema:"Corte do episódio", placeholder:true },
   { data:"2026-11-24", tema:"Tema da semana", placeholder:true },
-  { data:"2026-11-26", tema:"Corte do episódio", placeholder:true },
+  { data:"2026-11-26", tema:"Histórias reais", tipo:"carrossel", titulo:"1 ano do Respira: retrospectiva e obrigada", legenda:"Faz um ano que o primeiro episódio do Respira foi ao ar. A Marcinha e a Luisa sentaram para contar as próprias histórias e tirar do papel um projeto que estavam sonhando havia três anos.\n\nDepois vieram as tentantes, a gestação, a cesariana, o parto normal, o luto perinatal e o puerpério. Vieram os relatos de parto, a Moara contando como foi parir na Bélgica, a Dani falando de enfermagem obstétrica, a Cris falando de maternidade atípica sem romantizar. Vieram as nossas mães e os nossos maridos. E, mais recentemente, a Ana, a Mari e a Carol.\n\nCada conversa só existiu porque alguém topou contar. E chegou longe porque você ouviu, salvou e mandou para quem precisava.\n\nObrigada. O segundo ano começa agora, com episódio novo toda quarta, às 20h, no YouTube e no Spotify.\n\nManda para alguém que ouviu o Respira com você neste ano.\n\n#MaternidadeReal #PodcastMaternidade #RelatoDeParto #Puerpério #SaúdeMentalMaterna", slides:[
+      {img:"imagens/p30-1.jpg"},
+      {img:"imagens/p30-2.jpg"},
+      {img:"imagens/p30-3.jpg"},
+      {img:"imagens/p30-4.jpg"},
+      {img:"imagens/p30-5.jpg"},
+      {img:"imagens/p30-6.jpg"},
+      {img:"imagens/p30-7.jpg"},
+      {img:"imagens/p30-8.jpg"},
+      {img:"imagens/p30-9.jpg"},
+      {img:"imagens/p30-10.jpg"}
+    ] },
   { data:"2026-11-27", tema:"Carrossel do episódio", placeholder:true },
   { data:"2026-11-28", tema:"Respiro", tipo:"imagem", titulo:"Respiro: um banho demorado sem ninguém chamando também é cuidado.", legenda:"Banho com a porta aberta, ouvido atento, xampu às pressas. Quem tem filho pequeno conhece bem.\n\nQuando alguém fica com o bebê e o banho dura um pouco mais, o corpo volta a ser seu por alguns minutos. Dá pra pedir esses minutos sem culpa.\n\nManda pra quem pode segurar o bebê enquanto ela toma esse banho.\n\n#Puerpério #MaternidadeReal #Autocuidado #RespiraVaiPassar", slides:[
       {img:"imagens/p23-1.jpg"}
