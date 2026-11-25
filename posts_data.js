@@ -110,7 +110,7 @@ const POSTS = [
   { data:"2026-12-03", tema:"Corte do episódio", placeholder:true },
   { data:"2026-12-04", tema:"Identificação", tipo:"carrossel", titulo:"Carrossel do EP 36: o único medo da gravidez dela", legenda:"\"Mamãe, eu queria nascer prematura e você não deixou.\"\n\nA Tereza disse isso há pouco tempo, do nada. E a Marcinha, que passou a gravidez inteira contando as semanas, respondeu sem pensar duas vezes: não deixei mesmo.\n\nObstetra, ela não teve medo do parto. O medo era a Tereza chegar antes. No episódio 36, gravado para o Novembro Roxo, a neonatologista Luisa Petri conversa com a Marcinha e a Lu sobre os bebês que chegam antes e as famílias que esperam por eles na UTI. Link na bio.\n\n#RespiraVaiPassar #NovembroRoxo #Prematuridade #Gravidez #MaternidadeReal", slides:[{img:"imagens/p32-1.jpg"},{img:"imagens/p32-2.jpg"},{img:"imagens/p32-3.jpg"},{img:"imagens/p32-4.jpg"},{img:"imagens/p32-5.jpg"},{img:"imagens/p32-6.jpg"},{img:"imagens/p32-7.jpg"}] },
   { data:"2026-12-05", tema:"Identificação", tipo:"imagem", titulo:"O parto acontece entre as orelhas, não entre as pernas", legenda:"A analgesia é a intervenção mais usada no trabalho de parto, e não tem nada de errado nisso. A Marcinha costuma repetir uma frase que resume bem o que ela vê todos os dias no consultório: o parto acontece entre as orelhas, não entre as pernas. A cabeça da mulher, o quanto ela se sente segura e acompanhada, pesa tanto quanto a parte física. Ela já teve uma assistência de 44 horas, a mais longa da carreira dela, e segue acreditando nisso.\n\nA assistência mais longa da carreira dela está nesse episódio. 44 horas. Episódio 5, link na bio.\n\n#RespiraVaiPassar #TrabalhoDeParto #PartoHumanizado", slides:[
-      {img:"imagens/p24-1.jpg"}
+      {img:"imagens/p24-1.jpg?v=2"}
     ] },
   { data:"2026-12-07", tema:"Corte do episódio", placeholder:true },
   { data:"2026-12-08", tema:"Tema da semana", placeholder:true },
@@ -124,7 +124,7 @@ const POSTS = [
   { data:"2026-12-17", tema:"Corte do episódio", placeholder:true },
   { data:"2026-12-18", tema:"Carrossel do episódio", placeholder:true },
   { data:"2026-12-19", tema:"Humor", tipo:"imagem", titulo:"Eu me tranco no banheiro pra fugir das minhas filhas", legenda:"Porta trancada, celular na mão, alguns minutos fora daquela realidade. A Luisa admitiu que faz isso desde que a Sofia era bebê e alguém batia na porta pedindo pra agilizar. Anos depois, continua. Ela sabe que um dia vai sentir falta de ouvir \"mamãe, mamãe, mamãe\". Hoje, às vezes, só quer cinco minutos de banheiro. Essa foi uma das confissões do episódio 30, um bate-papo mais curto entre a Luisa e a Marcinha sobre o que muita mãe pensa e não fala.\n\nTem mais confissão de mãe que ninguém admite no episódio 30. Link na bio.\n\n#RespiraVaiPassar #MaternidadeReal #HumorMaterno", slides:[
-      {img:"imagens/p26-1.jpg"}
+      {img:"imagens/p26-1.jpg?v=2"}
     ] },
   { data:"2026-12-21", tema:"Corte do episódio", placeholder:true },
   { data:"2026-12-22", tema:"Tema da semana", placeholder:true },
@@ -138,7 +138,7 @@ const POSTS = [
   { data:"2026-12-31", tema:"Corte do episódio", placeholder:true },
   { data:"2027-01-01", tema:"Carrossel do episódio", placeholder:true },
   { data:"2027-01-02", tema:"Humor", tipo:"imagem", titulo:"Quem pode tocar na sua barriga de grávida", legenda:"Tem gente que acha que barriga de grávida é propriedade pública. No episódio sobre gestação, a Marcinha e a Luisa falam sobre as polêmicas que toda mulher grávida enfrenta: quem pode tocar na barriga, o que fazer com o ranço do parceiro sumindo, se dá pra conversar com o bebê e como fica a vida sexual durante a gravidez. Respira fundo e lembra: seu corpo, suas regras.\n\nA resposta pra essa pergunta rende risada garantida. Episódio 3, link na bio.\n\n#RespiraVaiPassar #Gestação #MaternidadeReal", slides:[
-      {img:"imagens/p28-1.jpg"}
+      {img:"imagens/p28-1.jpg?v=2"}
     ] },
   { data:"2027-01-04", tema:"Corte do episódio", placeholder:true },
   { data:"2027-01-05", tema:"Tema da semana", placeholder:true },
