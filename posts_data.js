@@ -90,25 +90,25 @@ const POSTS = [
   { data:"2026-11-23", tema:"Corte do episódio", placeholder:true },
   { data:"2026-11-24", tema:"Tema da semana", placeholder:true },
   { data:"2026-11-26", tema:"Histórias reais", tipo:"carrossel", titulo:"1 ano do Respira: retrospectiva e obrigada", legenda:"Faz um ano que o primeiro episódio do Respira foi ao ar. A Marcinha e a Luisa sentaram para contar as próprias histórias e tirar do papel um projeto que estavam sonhando havia três anos.\n\nDepois vieram as tentantes, a gestação, a cesariana, o parto normal, o luto perinatal e o puerpério. Vieram os relatos de parto, a Moara contando como foi parir na Bélgica, a Dani falando de enfermagem obstétrica, a Cris falando de maternidade atípica sem romantizar. Vieram as nossas mães e os nossos maridos. E, mais recentemente, a Ana, a Mari e a Carol.\n\nCada conversa só existiu porque alguém topou contar. E chegou longe porque você ouviu, salvou e mandou para quem precisava.\n\nObrigada. O segundo ano começa agora, com episódio novo toda quarta, às 20h, no YouTube e no Spotify.\n\nManda para alguém que ouviu o Respira com você neste ano.\n\n#MaternidadeReal #PodcastMaternidade #RelatoDeParto #Puerpério #SaúdeMentalMaterna", slides:[
-      {img:"imagens/p30-1.jpg"},
-      {img:"imagens/p30-2.jpg"},
-      {img:"imagens/p30-3.jpg"},
-      {img:"imagens/p30-4.jpg"},
-      {img:"imagens/p30-5.jpg"},
-      {img:"imagens/p30-6.jpg"},
-      {img:"imagens/p30-7.jpg"},
-      {img:"imagens/p30-8.jpg"},
-      {img:"imagens/p30-9.jpg"},
-      {img:"imagens/p30-10.jpg"}
+      {img:"imagens/p30-1.jpg?v=5"},
+      {img:"imagens/p30-2.jpg?v=5"},
+      {img:"imagens/p30-3.jpg?v=5"},
+      {img:"imagens/p30-4.jpg?v=5"},
+      {img:"imagens/p30-5.jpg?v=5"},
+      {img:"imagens/p30-6.jpg?v=5"},
+      {img:"imagens/p30-7.jpg?v=5"},
+      {img:"imagens/p30-8.jpg?v=5"},
+      {img:"imagens/p30-9.jpg?v=5"},
+      {img:"imagens/p30-10.jpg?v=5"}
     ] },
-  { data:"2026-11-27", tema:"Carrossel do episódio", placeholder:true },
+  { data:"2026-11-27", tema:"Histórias reais", tipo:"carrossel", titulo:"Carrossel do EP 35: a pediatra que pediu o vácuo", legenda:"\"Marcinha, eu não preciso desse troféu.\"\n\nFoi o que a Luisa Petri disse lá pelo fim de um dia inteiro de trabalho de parto. Ela é neonatologista, já recebeu bebês em quase mil partos e sabia exatamente o que estava pedindo quando pediu o vácuo. O troféu, no caso, era o parto sem intervenção. Ela só queria que acabasse.\n\nO jeito como a Alice chegou está no episódio 35, com a Marcinha e a Lu. Link na bio.\n\n#RespiraVaiPassar #PartoNormal #TrabalhoDeParto #RelatoDeParto #Neonatologia", slides:[{img:"imagens/p31-1.jpg"},{img:"imagens/p31-2.jpg"},{img:"imagens/p31-3.jpg"},{img:"imagens/p31-4.jpg"},{img:"imagens/p31-5.jpg"},{img:"imagens/p31-6.jpg"},{img:"imagens/p31-7.jpg"}] },
   { data:"2026-11-28", tema:"Respiro", tipo:"imagem", titulo:"Respiro: um banho demorado sem ninguém chamando também é cuidado.", legenda:"Banho com a porta aberta, ouvido atento, xampu às pressas. Quem tem filho pequeno conhece bem.\n\nQuando alguém fica com o bebê e o banho dura um pouco mais, o corpo volta a ser seu por alguns minutos. Dá pra pedir esses minutos sem culpa.\n\nManda pra quem pode segurar o bebê enquanto ela toma esse banho.\n\n#Puerpério #MaternidadeReal #Autocuidado #RespiraVaiPassar", slides:[
       {img:"imagens/p23-1.jpg"}
     ] },
   { data:"2026-11-30", tema:"Corte do episódio", placeholder:true },
   { data:"2026-12-01", tema:"Tema da semana", placeholder:true },
   { data:"2026-12-03", tema:"Corte do episódio", placeholder:true },
-  { data:"2026-12-04", tema:"Carrossel do episódio", placeholder:true },
+  { data:"2026-12-04", tema:"Identificação", tipo:"carrossel", titulo:"Carrossel do EP 36: o único medo da gravidez dela", legenda:"\"Mamãe, eu queria nascer prematura e você não deixou.\"\n\nA Tereza disse isso há pouco tempo, do nada. E a Marcinha, que passou a gravidez inteira contando as semanas, respondeu sem pensar duas vezes: não deixei mesmo.\n\nObstetra, ela não teve medo do parto. O medo era a Tereza chegar antes. No episódio 36, gravado para o Novembro Roxo, a neonatologista Luisa Petri conversa com a Marcinha e a Lu sobre os bebês que chegam antes e as famílias que esperam por eles na UTI. Link na bio.\n\n#RespiraVaiPassar #NovembroRoxo #Prematuridade #Gravidez #MaternidadeReal", slides:[{img:"imagens/p32-1.jpg"},{img:"imagens/p32-2.jpg"},{img:"imagens/p32-3.jpg"},{img:"imagens/p32-4.jpg"},{img:"imagens/p32-5.jpg"},{img:"imagens/p32-6.jpg"},{img:"imagens/p32-7.jpg"}] },
   { data:"2026-12-05", tema:"Identificação", tipo:"imagem", titulo:"O parto acontece entre as orelhas, não entre as pernas", legenda:"A analgesia é a intervenção mais usada no trabalho de parto, e não tem nada de errado nisso. A Marcinha costuma repetir uma frase que resume bem o que ela vê todos os dias no consultório: o parto acontece entre as orelhas, não entre as pernas. A cabeça da mulher, o quanto ela se sente segura e acompanhada, pesa tanto quanto a parte física. Ela já teve uma assistência de 44 horas, a mais longa da carreira dela, e segue acreditando nisso.\n\nA assistência mais longa da carreira dela está nesse episódio. 44 horas. Episódio 5, link na bio.\n\n#RespiraVaiPassar #TrabalhoDeParto #PartoHumanizado", slides:[
       {img:"imagens/p24-1.jpg"}
     ] },
