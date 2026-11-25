@@ -334,6 +334,13 @@ const TIPO_LABEL = {carrossel:"Carrossel", reel:"Reel · vídeo", imagem:"Imagem
 const SVG_PLAY = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>';
 const SVG_PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>';
 const pad = n => String(n+1).padStart(2,"0");
+/* ordem de exibição: por data, sem os posts ocultos. O índice do array continua sendo a chave no banco. */
+let ORD = [], NUM = {};
+function ordenar(){
+  ORD = POSTS.map((_,i)=>i).filter(i=>!POSTS[i].oculto).sort((a,b)=>{ const x=POSTS[a].data||"", y=POSTS[b].data||""; return x<y?-1:x>y?1:a-b; });
+  NUM = {}; ORD.forEach((i,k)=>{ NUM[i]=k; });
+}
+const padN = i => String(NUM[i]+1).padStart(2,"0");
 const esc = t => String(t||"").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const DIAS = ["domingo","segunda","terça","quarta","quinta","sexta","sábado"];
 const MESES = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
@@ -360,29 +367,30 @@ function ordemTemas(lista){
 
 /* ---- barra lateral, perfil e grade ---- */
 function build(){
+  ordenar();
   $("#clientName").textContent = CLIENTE.nome;
-  $("#clientHandle").textContent = "@"+CLIENTE.usuario+" · "+POSTS.length+" publicações";
+  $("#clientHandle").textContent = "@"+CLIENTE.usuario+" · "+ORD.length+" publicações";
   $("#avatar").innerHTML = CLIENTE.logo ? `<img src="${esc(CLIENTE.logo)}" alt="">` : esc(CLIENTE.iniciais);
   $("#pName").textContent = CLIENTE.usuario;
-  $("#pCount").textContent = POSTS.length;
+  $("#pCount").textContent = ORD.length;
   $("#pBio").textContent = CLIENTE.bio;
   document.title = "Aprovação · "+CLIENTE.nome;
 
   const grupos = {};
-  POSTS.forEach((p,i)=>{ (grupos[p.tema] = grupos[p.tema]||[]).push(i); });
-  const temasOrdenados = ordemTemas(POSTS.map(p=>p.tema));
+  ORD.forEach(i=>{ const p = POSTS[i]; (grupos[p.tema] = grupos[p.tema]||[]).push(i); });
+  const temasOrdenados = ordemTemas(ORD.map(i=>POSTS[i].tema));
   $("#list").innerHTML = temasOrdenados.map(tema=>{
     const itens = grupos[tema].map(i=>{
       const p = POSTS[i];
       if(p.placeholder) return `
       <li><div class="item placeholder">
-        <span class="num">${pad(i)}</span>
+        <span class="num">${padN(i)}</span>
         <span class="thumb"></span>
         <span class="tema"><span>Aguardando episódio</span><small>${dataCurta(p)} · ${DIAS[dt(p).getDay()].slice(0,3)}</small></span>
       </div></li>`;
       return `
       <li><button class="item" data-i="${i}">
-        <span class="num">${pad(i)}</span>
+        <span class="num">${padN(i)}</span>
         <span class="thumb">${art(slides(p)[0])}<i class="st" data-s=""></i></span>
         <span class="tema"><span>${esc(p.tema)}</span><small>${dataCurta(p)} · ${DIAS[dt(p).getDay()].slice(0,3)}</small></span>
         <span class="tipo" title="${TIPO_LABEL[p.tipo]}">${ICON[p.tipo]}</span>
@@ -391,18 +399,18 @@ function build(){
     return `<details class="temaGroup"><summary class="list-title">${esc(tema)} <span class="count">${grupos[tema].length}</span></summary><ul class="list">${itens}</ul></details>`;
   }).join("");
 
-  const ordemFeed = POSTS.map((_,i)=>i).sort((a,b)=>b-a);
+  const ordemFeed = ORD.slice().reverse();
   $("#grid").innerHTML = ordemFeed.map(i=>{
     const p = POSTS[i];
     if(p.placeholder) return `
     <div class="cell placeholder" aria-label="Aguardando episódio, ${dataLonga(p)}">
-      <span class="badge"><span class="n">${i+1}</span>${dataCurta(p)}</span>
+      <span class="badge"><span class="n">${NUM[i]+1}</span>${dataCurta(p)}</span>
       <span class="ag">Aguardando episódio</span>
     </div>`;
     return `
-    <button class="cell" data-i="${i}" aria-label="Abrir post ${i+1}, ${dataLonga(p)}: ${esc(p.titulo)}">
+    <button class="cell" data-i="${i}" aria-label="Abrir post ${NUM[i]+1}, ${dataLonga(p)}: ${esc(p.titulo)}">
       ${art(slides(p)[0])}
-      <span class="badge"><span class="n">${i+1}</span>${dataCurta(p)}</span>
+      <span class="badge"><span class="n">${NUM[i]+1}</span>${dataCurta(p)}</span>
       <i class="st" data-s=""></i>
       <span class="kind">${ICON[p.tipo]}</span>
     </button>`;
@@ -443,17 +451,17 @@ let pronto = false;
 
 function paintStatus(){
   POSTS.forEach((p,i)=>{
-    if(p.placeholder) return;
+    if(p.placeholder || p.oculto) return;
     const s = postadoEm(i) ? "postado" : agendadoAtivo(i) ? "agendado" : ((ESTADO[i] && ESTADO[i].status) || "");
     const t = s==="agendado" && horaDefinida(AGENDADO[i]) ? dataHoraCurta(AGENDADO[i]) : "";
     document.querySelectorAll(`[data-i="${i}"] .st`).forEach(el=>{ el.dataset.s = s; el.dataset.t = t; });
   });
-  const total = POSTS.filter(p=>!p.placeholder).length;
+  const total = POSTS.filter(p=>!p.placeholder && !p.oculto).length;
   const v = Object.values(ESTADO);
   const ok = v.filter(x=>x.status==="ok").length, aj = v.filter(x=>x.status==="ajuste").length;
   const falta = total - ok - aj;
-  const np = POSTS.filter((p,i)=>!p.placeholder && postadoEm(i)).length;
-  const na = POSTS.filter((p,i)=>!p.placeholder && agendadoAtivo(i)).length;
+  const np = POSTS.filter((p,i)=>!p.placeholder && !p.oculto && postadoEm(i)).length;
+  const na = POSTS.filter((p,i)=>!p.placeholder && !p.oculto && agendadoAtivo(i)).length;
   $("#summary").textContent = pronto
     ? (falta===0 ? "Tudo respondido: "+ok+" aprovados, "+aj+" com ajuste." : ok+" aprovados · "+aj+" com ajuste · "+falta+" sem resposta")
       + " · "+na+" agendados · "+np+" de "+total+" postados"
@@ -625,10 +633,11 @@ function open(i, from){
   }
 
   $("#dots").innerHTML = sl.length>1 ? sl.map((_,k)=>`<span class="${k?"":"on"}"></span>`).join("") : "";
-  $("#mWhen").innerHTML = `<span>Post ${pad(i)} de ${POSTS.length} · postar em</span><b>${esc(dataLonga(p))}</b>`;
-  $("#pPrev").disabled = i===POSTS.length-1; $("#pNext").disabled = i===0;
-  $("#pPrevOut").hidden = i===POSTS.length-1; $("#pNextOut").hidden = i===0;
-  $("#mMeta").innerHTML = `Post ${pad(i)} &nbsp;·&nbsp; ${esc(dataCurta(p))} &nbsp;·&nbsp; <b>${TIPO_LABEL[p.tipo]}${p.tipo==="carrossel"?" · "+sl.length+" imagens":""}</b>`;
+  $("#mWhen").innerHTML = `<span>Post ${padN(i)} de ${ORD.length} · postar em</span><b>${esc(dataLonga(p))}</b>`;
+  const k = NUM[i];
+  $("#pPrev").disabled = k===ORD.length-1; $("#pNext").disabled = k===0;
+  $("#pPrevOut").hidden = k===ORD.length-1; $("#pNextOut").hidden = k===0;
+  $("#mMeta").innerHTML = `Post ${padN(i)} &nbsp;·&nbsp; ${esc(dataCurta(p))} &nbsp;·&nbsp; <b>${TIPO_LABEL[p.tipo]}${p.tipo==="carrossel"?" · "+sl.length+" imagens":""}</b>`;
   $("#mTitle").textContent = p.titulo;
   $("#mCap").textContent = p.legenda;
   $(".sheet").scrollTop = 0;
@@ -650,8 +659,9 @@ function close(){
   if(opener) opener.focus({preventScroll:true});
 }
 function goPost(d){
-  const j = cur + d;
-  if(j<0 || j>=POSTS.length) return;
+  const k = NUM[cur] + d;
+  if(k<0 || k>=ORD.length) return;
+  const j = ORD[k];
   const o = opener; open(j, null); opener = o;
 }
 function sync(){
