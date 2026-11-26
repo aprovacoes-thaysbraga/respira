@@ -117,35 +117,35 @@ const POSTS = [
   { data:"2026-12-10", tema:"Corte do episódio", placeholder:true },
   { data:"2026-12-11", tema:"Carrossel do episódio", placeholder:true },
   { data:"2026-12-12", tema:"Respiro", tipo:"imagem", titulo:"Respiro: dormiu mal de novo? hoje o dia pode ir mais devagar.", legenda:"Acordou três vezes, ou cinco, ou perdeu a conta. E o dia começou do mesmo jeito.\n\nHoje dá pra baixar a régua. Comida simples, roupa no cesto mais um dia, cochilo junto com o bebê se ele deixar. O que ficar pra amanhã, fica.\n\nSalva pra ler na próxima madrugada difícil.\n\n#SonoDoBebê #Puerpério #MaternidadeReal #RespiraVaiPassar", slides:[
-      {img:"imagens/p25-1.jpg"}
+      {img:"imagens/p25-1.jpg?v=2"}
     ] },
   { data:"2026-12-14", tema:"Corte do episódio", placeholder:true },
   { data:"2026-12-15", tema:"Tema da semana", placeholder:true },
   { data:"2026-12-17", tema:"Corte do episódio", placeholder:true },
   { data:"2026-12-18", tema:"Carrossel do episódio", placeholder:true },
   { data:"2026-12-19", tema:"Humor", tipo:"imagem", titulo:"Eu me tranco no banheiro pra fugir das minhas filhas", legenda:"Porta trancada, celular na mão, alguns minutos fora daquela realidade. A Luisa admitiu que faz isso desde que a Sofia era bebê e alguém batia na porta pedindo pra agilizar. Anos depois, continua. Ela sabe que um dia vai sentir falta de ouvir \"mamãe, mamãe, mamãe\". Hoje, às vezes, só quer cinco minutos de banheiro. Essa foi uma das confissões do episódio 30, um bate-papo mais curto entre a Luisa e a Marcinha sobre o que muita mãe pensa e não fala.\n\nTem mais confissão de mãe que ninguém admite no episódio 30. Link na bio.\n\n#RespiraVaiPassar #MaternidadeReal #HumorMaterno", slides:[
-      {img:"imagens/p26-1.jpg?v=2"}
+      {img:"imagens/p26-1.jpg?v=3"}
     ] },
   { data:"2026-12-21", tema:"Corte do episódio", placeholder:true },
   { data:"2026-12-22", tema:"Tema da semana", placeholder:true },
   { data:"2026-12-24", tema:"Corte do episódio", placeholder:true },
   { data:"2026-12-25", tema:"Carrossel do episódio", placeholder:true },
   { data:"2026-12-26", tema:"Respiro", tipo:"imagem", titulo:"Respiro: visita demais no fim de ano? dá pra dizer hoje não.", legenda:"Fim de ano junta família, visita, bebê passando de colo em colo e uma agenda que quase nunca é a sua.\n\nDizer que hoje não dá também é cuidar do bebê e de você. Pode ser outro dia, pode ser uma visita mais curta, pode ser por foto.\n\nCompartilha com quem vai receber visita nesses dias.\n\n#FimDeAno #Puerpério #RedeDeApoio #MaternidadeReal #RespiraVaiPassar", slides:[
-      {img:"imagens/p27-1.jpg"}
+      {img:"imagens/p27-1.jpg?v=2"}
     ] },
   { data:"2026-12-28", tema:"Corte do episódio", placeholder:true },
   { data:"2026-12-29", tema:"Tema da semana", placeholder:true },
   { data:"2026-12-31", tema:"Corte do episódio", placeholder:true },
   { data:"2027-01-01", tema:"Carrossel do episódio", placeholder:true },
   { data:"2027-01-02", tema:"Humor", tipo:"imagem", titulo:"Quem pode tocar na sua barriga de grávida", legenda:"Tem gente que acha que barriga de grávida é propriedade pública. No episódio sobre gestação, a Marcinha e a Luisa falam sobre as polêmicas que toda mulher grávida enfrenta: quem pode tocar na barriga, o que fazer com o ranço do parceiro sumindo, se dá pra conversar com o bebê e como fica a vida sexual durante a gravidez. Respira fundo e lembra: seu corpo, suas regras.\n\nA resposta pra essa pergunta rende risada garantida. Episódio 3, link na bio.\n\n#RespiraVaiPassar #Gestação #MaternidadeReal", slides:[
-      {img:"imagens/p28-1.jpg?v=3"}
+      {img:"imagens/p28-1.jpg?v=4"}
     ] },
   { data:"2027-01-04", tema:"Corte do episódio", placeholder:true },
   { data:"2027-01-05", tema:"Tema da semana", placeholder:true },
   { data:"2027-01-07", tema:"Corte do episódio", placeholder:true },
   { data:"2027-01-08", tema:"Carrossel do episódio", placeholder:true },
   { data:"2027-01-09", tema:"Respiro", tipo:"imagem", titulo:"Respiro: começar o ano sem meta nenhuma também conta.", legenda:"Janeiro chega cheio de lista: voltar a treinar, organizar a casa, ler mais, dar conta de tudo.\n\nCom um bebê em casa, chegar inteira no fim do dia já é muita coisa. A lista pode esperar o tempo que for preciso.\n\nManda pra uma mãe que começou o ano se cobrando.\n\n#MaternidadeReal #Puerpério #SaúdeMentalMaterna #RespiraVaiPassar", slides:[
-      {img:"imagens/p29-1.jpg"}
+      {img:"imagens/p29-1.jpg?v=2"}
     ] },
   { data:"2027-01-11", tema:"Corte do episódio", placeholder:true },
   { data:"2027-01-12", tema:"Tema da semana", placeholder:true },
